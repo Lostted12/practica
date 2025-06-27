@@ -1,0 +1,3165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тетюшское АТП - Пассажирские перевозки</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Основные стили */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --white: #fff;
+            --gray: #95a5a6;
+            --light-gray: #e9ecef;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-secondary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1a252f;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        /* Шапка */
+        .header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            left: 0;
+            margin-bottom: 0;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+
+        .header-contacts {
+            display: flex;
+            gap: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .contact-icon {
+            color: var(--secondary-color);
+        }
+
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .burger-menu span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        .nav {
+            position: relative;
+            background-color: var(--primary-color);
+            padding: 10px 0;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        /* Основное содержимое */
+        .main {
+            margin-top: 80px;
+            min-height: calc(100vh - 160px);
+        }
+
+        .page {
+            display: none;
+            padding: 40px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-title-light {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+
+        /* Карточки */
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+        }
+
+        /* Герой секция */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-icon {
+            color: var(--secondary-color);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Формы */
+        .form-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-family: 'Roboto', sans-serif;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Статистика */
+        .stats-section {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* О компании */
+        .about {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-text {
+            flex: 1;
+            margin-bottom: 30px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .about-feature-icon {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+
+        /* Партнеры */
+        .partners {
+            padding: 60px 0;
+            background-color: var(--light-color);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .partner-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            min-height: 180px;
+        }
+
+        .partner-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .partner-item i {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+
+        /* Новости */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .news-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .news-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .news-image {
+            height: 200px;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary-color);
+            font-size: 3rem;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-content {
+            padding: 25px;
+        }
+
+        .news-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-date i {
+            color: var(--secondary-color);
+        }
+
+        .news-item h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .news-item p {
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .read-more:hover {
+            gap: 10px;
+        }
+
+        /* Пагинация */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: var(--transition);
+            background-color: var(--light-gray);
+        }
+
+        .page-link.active {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .page-link:hover:not(.active) {
+            background-color: var(--border-color);
+        }
+
+        /* Услуги */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .service-card p {
+            margin-bottom: 20px;
+            color: var(--text-light);
+            flex-grow: 1;
+        }
+
+        .service-features {
+            text-align: left;
+            margin-bottom: 25px;
+            list-style: none;
+        }
+
+        .service-features li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+            line-height: 1.5;
+        }
+
+        .service-features li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Расписание */
+        .schedule-section {
+            margin-top: 40px;
+        }
+
+        .schedule-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .schedule-tab {
+            padding: 10px 20px;
+            background-color: var(--light-color);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .schedule-tab.active {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .schedule-tab:hover:not(.active) {
+            background-color: var(--border-color);
+        }
+
+        .schedule-content {
+            display: none;
+        }
+
+        .schedule-content.active {
+            display: block;
+        }
+
+        .route-info {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .route-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .route-info p {
+            margin-bottom: 5px;
+            color: var(--text-light);
+        }
+
+        .schedule-table {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--white);
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        tr:hover {
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+
+        .local-routes {
+            display: grid;
+            gap: 15px;
+        }
+
+        .local-route {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .local-route h4 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .local-route p {
+            color: var(--text-light);
+        }
+
+        /* Галерея */
+        .gallery-slider {
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .slider-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background-color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-image {
+            font-size: 8rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .slide-caption {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .slide-description {
+            max-width: 600px;
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-btn:hover {
+            background-color: var(--white);
+            color: var(--secondary-color);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background-color: var(--white);
+            transform: scale(1.2);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .gallery-image {
+            height: 180px;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--primary-color);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .gallery-caption {
+            padding: 15px;
+            text-align: center;
+            font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Документы - улучшенный дизайн */
+        .documents-section {
+            padding: 60px 0;
+            background-color: var(--light-color);
+        }
+
+        .documents-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .document-category {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .document-category:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .document-category-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .document-category-icon {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .document-category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .document-list {
+            padding: 20px;
+            list-style: none;
+        }
+
+        .document-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .document-item:last-child {
+            border-bottom: none;
+        }
+
+        .document-item:hover {
+            padding-left: 5px;
+        }
+
+        .document-icon {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .document-link {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: var(--transition);
+            flex-grow: 1;
+        }
+
+        .document-link:hover {
+            color: var(--secondary-color);
+        }
+
+        .document-download {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .document-download i {
+            font-size: 0.8rem;
+        }
+
+        /* Контакты - переработанный дизайн */
+        .contacts-section {
+            padding: 60px 0;
+            background-color: var(--white);
+        }
+
+        .contacts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-info-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .contact-info-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        .contact-info-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .contact-info-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-color);
+        }
+
+        .contact-info-label i {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .contact-info-value {
+            color: var(--text-color);
+            padding-left: 30px;
+        }
+
+        .departments-list {
+            margin-top: 30px;
+        }
+
+        .department-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .department-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .department-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .department-name i {
+            color: var(--secondary-color);
+        }
+
+        .department-contacts {
+            color: var(--text-color);
+            margin-bottom: 5px;
+            padding-left: 28px;
+        }
+
+        .department-hours {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            padding-left: 28px;
+        }
+
+        /* Новая форма обратной связи */
+        .feedback-section {
+            background-color: var(--primary-color);
+            padding: 60px 0;
+            color: var(--white);
+        }
+
+        .feedback-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feedback-form {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feedback-form h3 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-family: 'Roboto', sans-serif;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Карта */
+        .map-container {
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 40px;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Подвал */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 60px 0 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            margin-bottom: 20px;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+
+        .footer-menu {
+            list-style: none;
+        }
+
+        .footer-menu li {
+            margin-bottom: 10px;
+        }
+
+        .footer-menu a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-menu a:hover {
+            color: var(--secondary-color);
+            padding-left: 5px;
+        }
+
+        .footer-contacts {
+            list-style: none;
+        }
+
+        .footer-contacts li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-contacts i {
+            width: 20px;
+            color: var(--secondary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .subscribe-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 10px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copyright {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 50px auto;
+            border-radius: var(--border-radius);
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal.small .modal-content {
+            max-width: 500px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            background: none;
+            border: none;
+        }
+
+        .close-modal:hover {
+            color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+        }
+
+        .modal-header h2 {
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .success-modal .modal-body {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-modal h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Анимации */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .contacts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hero-content {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-contacts {
+                display: none;
+            }
+
+            .burger-menu {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                flex-direction: column;
+                background-color: var(--white);
+                box-shadow: var(--shadow);
+                transition: var(--transition);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-link {
+                padding: 15px 20px;
+                border-bottom: 1px solid var(--border-color);
+                color: var(--primary-color);
+            }
+
+            .nav-link.active {
+                color: var(--white);
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .slider-container {
+                height: 400px;
+            }
+            
+            .slide-caption {
+                font-size: 1.8rem;
+            }
+            
+            .slide-description {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .partners-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero-features {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .slide-caption {
+                font-size: 1.5rem;
+            }
+            
+            .slide-image {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-top">
+            <a href="#" class="logo">
+                <i class="fas fa-bus logo-icon"></i>
+                Тетюшское АТП
+            </a>
+            <div class="header-contacts">
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    +7 (84373) 2-15-45
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    info@tetushi-atp.ru
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    РТ, г. Тетюши, ул. Ленина, 123
+                </div>
+            </div>
+            <div class="burger-menu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <nav class="nav">
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="home" onclick="showPage('home')">Главная</a></li>
+                <li><a href="#" class="nav-link" data-page="news" onclick="showPage('news')">Новости</a></li>
+                <li><a href="#" class="nav-link" data-page="services" onclick="showPage('services')">Услуги</a></li>
+                <li><a href="#" class="nav-link" data-page="gallery" onclick="showPage('gallery')">Галерея</a></li>
+                <li><a href="#" class="nav-link" data-page="documents" onclick="showPage('documents')">Документы</a></li>
+                <li><a href="#" class="nav-link" data-page="contacts" onclick="showPage('contacts')">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- Главная страница -->
+        <section class="page active" id="home">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Тетюшское автотранспортное предприятие</h1>
+                        <p class="hero-subtitle">Надежные пассажирские перевозки по Республике Татарстан с 1985 года</p>
+                        <div class="hero-features">
+                            <div class="feature"><i class="fas fa-shield-alt feature-icon"></i> Безопасность</div>
+                            <div class="feature"><i class="fas fa-clock feature-icon"></i> Пунктуальность</div>
+                            <div class="feature"><i class="fas fa-star feature-icon"></i> 38+ лет опыта</div>
+                            <div class="feature"><i class="fas fa-route feature-icon"></i> 15+ маршрутов</div>
+                        </div>
+                        <div class="cta-buttons">
+                            <a href="#" class="btn btn-primary" onclick="showPage('services')">Наши услуги</a>
+                            <a href="#" class="btn btn-primary" onclick="showPage('contacts')">Связаться с нами</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-section">
+                <div class="container">
+                    <h2 class="section-title-light">Тетюшское АТП в цифрах</h2>
+                    <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">Наша компания - это современный автопарк, опытные специалисты и тысячи довольных пассажиров</p>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-bus stat-icon"></i>
+                            <div class="stat-number" data-count="50">0</div>
+                            <div class="stat-text">Автобусов в парке</div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-route stat-icon"></i>
+                            <div class="stat-number" data-count="15">0</div>
+                            <div class="stat-text">Маршрутов</div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-users stat-icon"></i>
+                            <div class="stat-number" data-count="100000">0</div>
+                            <div class="stat-text">Пассажиров в год</div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star stat-icon"></i>
+                            <div class="stat-number" data-count="38">0</div>
+                            <div class="stat-text">Лет опыта</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about">
+                <div class="container">
+                    <h2 class="page-title">О нашей компании</h2>
+                    <p class="section-subtitle">Мы обеспечиваем надежные и комфортные пассажирские перевозки по Тетюшскому району и за его пределами</p>
+                    
+                    <div class="about-content">
+                        <div class="about-text">
+                            <p>ООО "ТЕТЮШСКОЕ АТП" - ведущее автотранспортное предприятие Тетюшского района Республики Татарстан, основанное в 1985 году. Мы специализируемся на пассажирских перевозках и обеспечиваем надежное транспортное сообщение между населенными пунктами региона.</p>
+                            <p>Наша компания обслуживает более 15 регулярных маршрутов, соединяющих Тетюши с Казанью, Ульяновском и другими городами. Мы гордимся нашей репутацией надежного партнера в сфере пассажирских перевозок.</p>
+                            <div class="about-features">
+                                <div class="about-feature"><i class="fas fa-certificate about-feature-icon"></i> Лицензированные перевозки</div>
+                                <div class="about-feature"><i class="fas fa-tools about-feature-icon"></i> Собственная ремонтная база</div>
+                                <div class="about-feature"><i class="fas fa-user-tie about-feature-icon"></i> Опытные водители</div>
+                                <div class="about-feature"><i class="fas fa-headset about-feature-icon"></i> Круглосуточная поддержка</div>
+                            </div>
+                            <a href="#" class="btn btn-primary" onclick="openDocument('ustav', event)">Наши документы</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="partners">
+                <div class="container">
+                    <h2 class="section-title">Наши партнеры</h2>
+                    <p class="section-subtitle">Мы сотрудничаем с ведущими организациями региона</p>
+                    
+                    <div class="partners-grid">
+                        <div class="partner-item">
+                            <i class="fas fa-city"></i>
+                            Администрация Тетюшского района
+                        </div>
+                        <div class="partner-item">
+                            <i class="fas fa-school"></i>
+                            Управление образования
+                        </div>
+                        <div class="partner-item">
+                            <i class="fas fa-road"></i>
+                            Министерство транспорта РТ
+                        </div>
+                        <div class="partner-item">
+                            <i class="fas fa-bus-alt"></i>
+                            Автовокзал Казани
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Новое окно обратной связи -->
+            <div class="feedback-section">
+                <div class="container">
+                    <h2 class="section-title-light">Обратная связь</h2>
+                    <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">Оставьте ваше сообщение, и мы обязательно вам ответим</p>
+                    
+                    <div class="feedback-container">
+                        <div class="feedback-form">
+                            <h3>Свяжитесь с нами</h3>
+                            <form onsubmit="submitContactForm(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="feedback-name">Ваше имя</label>
+                                        <input type="text" id="feedback-name" placeholder="Иван Иванов" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feedback-phone">Телефон</label>
+                                        <input type="tel" id="feedback-phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="feedback-email">Email</label>
+                                    <input type="email" id="feedback-email" placeholder="example@mail.ru" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="feedback-message">Ваше сообщение</label>
+                                    <textarea id="feedback-message" placeholder="Ваше сообщение" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить сообщение</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Новости -->
+        <section class="page" id="news">
+            <div class="container">
+                <h2 class="page-title">Новости компании</h2>
+                <p class="section-subtitle">Актуальные события и изменения в работе нашего предприятия</p>
+                
+                <div class="news-grid">
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #f0f8ff; color: #4682b4;">
+                            <i class="fas fa-bus-alt"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 15 Июня 2025</div>
+                            <h3>Обновление автопарка</h3>
+                            <p>Тетюшское АТП приобрело три новых автобуса ПАЗ для улучшения качества обслуживания пассажиров на междугородних маршрутах.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news1', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #fff0f5; color: #db7093;">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 10 Июня 2025</div>
+                            <h3>Новый маршрут Тетюши-Ульяновск</h3>
+                            <p>С 1 июля 2025 года запускается новый регулярный маршрут, соединяющий Тетюши с Ульяновском. Отправления ежедневно в 7:00 и 15:30.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news2', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #f0fff0; color: #2e8b57;">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 5 Июня 2025</div>
+                            <h3>Награда за безопасность</h3>
+                            <p>Тетюшское АТП получило благодарность от ГИБДД РТ за высокий уровень безопасности дорожного движения и отсутствие ДТП в 2024 году.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news3', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #fffaf0; color: #daa520;">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 28 Мая 2025</div>
+                            <h3>Летнее расписание</h3>
+                            <p>С 1 июня действует летнее расписание движения автобусов. Увеличена частота рейсов на популярных маршрутах.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news4', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #f5f5f5; color: #696969;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 20 Мая 2025</div>
+                            <h3>Модернизация ремонтной базы</h3>
+                            <p>Завершена модернизация ремонтной базы предприятия. Установлено новое диагностическое оборудование для повышения качества обслуживания автобусов.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news5', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image" style="background-color: #f0f8ff; color: #4682b4;">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date"><i class="far fa-calendar-alt"></i> 15 Мая 2025</div>
+                            <h3>Обучение персонала</h3>
+                            <p>Проведены курсы повышения квалификации для водителей и механиков. Изучены новые требования безопасности и технического обслуживания.</p>
+                            <a href="#" class="read-more" onclick="openNewsDetail('news6', event)">Читать далее <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link"><i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Услуги -->
+        <section class="page" id="services">
+            <div class="container">
+                <h2 class="page-title">Наши услуги</h2>
+                <p class="section-subtitle">Мы предлагаем широкий спектр транспортных услуг для населения и организаций</p>
+                
+                <div class="services-grid">
+                    <div class="service-card">
+                        <i class="fas fa-bus service-icon"></i>
+                        <h3>Регулярные маршруты</h3>
+                        <p>Ежедневные рейсы по установленному расписанию между городами и населенными пунктами Республики Татарстан.</p>
+                        <ul class="service-features">
+                            <li>Маршрут Тетюши - Казань</li>
+                            <li>Маршрут Тетюши - Ульяновск</li>
+                            <li>Внутрирайонные маршруты</li>
+                            <li>Пригородные маршруты</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary" onclick="showRouteSchedule(event)">Расписание</a>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-users service-icon"></i>
+                        <h3>Заказные перевозки</h3>
+                        <p>Организация перевозок для групп пассажиров, экскурсий, корпоративных мероприятий и других целей.</p>
+                        <ul class="service-features">
+                            <li>Экскурсионные поездки</li>
+                            <li>Корпоративные перевозки</li>
+                            <li>Школьные перевозки</li>
+                            <li>Свадебные перевозки</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary" onclick="showServiceDetails('charter', event)">Заказать</a>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-tools service-icon"></i>
+                        <h3>Техническое обслуживание</h3>
+                        <p>Полный комплекс услуг по техническому обслуживанию и ремонту автобусов и грузовых автомобилей.</p>
+                        <ul class="service-features">
+                            <li>Диагностика автомобилей</li>
+                            <li>Плановое ТО</li>
+                            <li>Капитальный ремонт</li>
+                            <li>Кузовные работы</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary" onclick="showServiceDetails('maintenance', event)">Подробнее</a>
+                    </div>
+                </div>
+                
+                <div class="schedule-section">
+                    <h2 class="section-title">Расписание движения</h2>
+                    <p class="section-subtitle">Актуальное расписание автобусных маршрутов</p>
+                    
+                    <div class="schedule-tabs">
+                        <button class="schedule-tab active" onclick="showSchedule('kazan', event)">Тетюши - Казань</button>
+                        <button class="schedule-tab" onclick="showSchedule('ulyanovsk', event)">Тетюши - Ульяновск</button>
+                        <button class="schedule-tab" onclick="showSchedule('local', event)">Местные маршруты</button>
+                    </div>
+                    
+                    <div class="schedule-content active" id="schedule-kazan">
+                        <div class="route-info">
+                            <h3>Маршрут: Тетюши - Казань</h3>
+                            <p>Расстояние: 142 км | Время в пути: 2ч 30мин | Стоимость: 350 руб</p>
+                        </div>
+                        <div class="schedule-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Отправление из Тетюш</th>
+                                        <th>Прибытие в Казань</th>
+                                        <th>Отправление из Казани</th>
+                                        <th>Прибытие в Тетюши</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>06:30</td>
+                                        <td>09:00</td>
+                                        <td>10:00</td>
+                                        <td>12:30</td>
+                                    </tr>
+                                    <tr>
+                                        <td>09:15</td>
+                                        <td>11:45</td>
+                                        <td>13:30</td>
+                                        <td>16:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>14:00</td>
+                                        <td>16:30</td>
+                                        <td>18:00</td>
+                                        <td>20:30</td>
+                                    </tr>
+                                    <tr>
+                                        <td>17:30</td>
+                                        <td>20:00</td>
+                                        <td>21:00</td>
+                                        <td>23:30</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-content" id="schedule-ulyanovsk">
+                        <div class="route-info">
+                            <h3>Маршрут: Тетюши - Ульяновск</h3>
+                            <p>Расстояние: 85 км | Время в пути: 1ч 45мин | Стоимость: 280 руб</p>
+                        </div>
+                        <div class="schedule-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Отправление из Тетюш</th>
+                                        <th>Прибытие в Ульяновск</th>
+                                        <th>Отправление из Ульяновска</th>
+                                        <th>Прибытие в Тетюши</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>07:00</td>
+                                        <td>08:45</td>
+                                        <td>10:00</td>
+                                        <td>11:45</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15:30</td>
+                                        <td>17:15</td>
+                                        <td>19:00</td>
+                                        <td>20:45</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-content" id="schedule-local">
+                        <div class="route-info">
+                            <h3>Местные маршруты</h3>
+                            <p>Внутрирайонные и пригородные маршруты</p>
+                        </div>
+                        <div class="local-routes">
+                            <div class="local-route">
+                                <h4>Тетюши - Бурундуки - Нармонка</h4>
+                                <p>Отправление: 08:00, 14:00, 18:00 | Стоимость: 45-65 руб</p>
+                            </div>
+                            <div class="local-route">
+                                <h4>Тетюши - Кзыл-Байтак - Старые Матаки</h4>
+                                <p>Отправление: 09:30, 16:30 | Стоимость: 35-55 руб</p>
+                            </div>
+                            <div class="local-route">
+                                <h4>Тетюши - Долгая Поляна</h4>
+                                <p>Отправление: 07:30, 12:00, 17:00 | Стоимость: 40 руб</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Галерея -->
+        <section class="page" id="gallery">
+            <div class="container">
+                <h2 class="page-title">Галерея</h2>
+                <p class="section-subtitle">Фотографии нашего автопарка, сотрудников и объектов</p>
+                
+                <div class="gallery-slider">
+                    <div class="slider-container">
+                        <div class="slide active">
+                            <div class="slide-image"><i class="fas fa-bus"></i></div>
+                            <h2 class="slide-caption">Современный автопарк</h2>
+                            <p class="slide-description">Наши комфортабельные автобусы обеспечивают безопасные и удобные поездки</p>
+                        </div>
+                        <div class="slide">
+                            <div class="slide-image"><i class="fas fa-tools"></i></div>
+                            <h2 class="slide-caption">Ремонтная база</h2>
+                            <p class="slide-description">Собственная современная ремонтная база с квалифицированными специалистами</p>
+                        </div>
+                        <div class="slide">
+                            <div class="slide-image"><i class="fas fa-building"></i></div>
+                            <h2 class="slide-caption">Офис компании</h2>
+                            <p class="slide-description">Центральный офис и диспетчерская служба в г. Тетюши</p>
+                        </div>
+                        <div class="slide">
+                            <div class="slide-image"><i class="fas fa-route"></i></div>
+                            <h2 class="slide-caption">Маршрутная сеть</h2>
+                            <p class="slide-description">Развитая сеть маршрутов по всему Тетюшскому району</p>
+                        </div>
+                        <div class="slide">
+                            <div class="slide-image"><i class="fas fa-users"></i></div>
+                            <h2 class="slide-caption">Наша команда</h2>
+                            <p class="slide-description">Опытные водители и механики - основа нашего успеха</p>
+                        </div>
+                    </div>
+                    <button class="slider-btn prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+                    <div class="slider-dots">
+                        <span class="dot active" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                        <span class="dot" onclick="currentSlide(4)"></span>
+                        <span class="dot" onclick="currentSlide(5)"></span>
+                    </div>
+                </div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openGalleryModal('bus1', event)">
+                        <div class="gallery-image" style="background-color: #f0f8ff; color: #4682b4;">
+                            <i class="fas fa-bus-alt"></i>
+                        </div>
+                        <div class="gallery-caption">Автобусы</div>
+                    </div>
+                    <div class="gallery-item" onclick="openGalleryModal('office', event)">
+                        <div class="gallery-image" style="background-color: #fff0f5; color: #db7093;">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="gallery-caption">Офис</div>
+                    </div>
+                    <div class="gallery-item" onclick="openGalleryModal('team', event)">
+                        <div class="gallery-image" style="background-color: #f0fff0; color: #2e8b57;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="gallery-caption">Команда</div>
+                    </div>
+                    <div class="gallery-item" onclick="openGalleryModal('maintenance', event)">
+                        <div class="gallery-image" style="background-color: #fffaf0; color: #daa520;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="gallery-caption">Ремонт</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Документы - улучшенный дизайн -->
+        <section class="page documents-section" id="documents">
+            <div class="container">
+                <h2 class="page-title">Документы</h2>
+                <p class="section-subtitle">Официальные документы и нормативные акты нашей компании</p>
+                
+                <div class="documents-container">
+                    <div class="document-category">
+                        <div class="document-category-header">
+                            <i class="fas fa-file-alt document-category-icon"></i>
+                            <h3 class="document-category-title">Учредительные документы</h3>
+                        </div>
+                        <ul class="document-list">
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('ustav', event)">Устав ООО "ТЕТЮШСКОЕ АТП"</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('reg-certificate', event)">Свидетельство о регистрации</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('license', event)">Лицензия на перевозки</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="document-category">
+                        <div class="document-category-header">
+                            <i class="fas fa-file-invoice-dollar document-category-icon"></i>
+                            <h3 class="document-category-title">Финансовые документы</h3>
+                        </div>
+                        <ul class="document-list">
+                            <li class="document-item">
+                                <i class="fas fa-file-excel document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('financial-report', event)">Финансовый отчет 2024</a>
+                                <span class="document-download"><i class="fas fa-download"></i> XLSX</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('tax-certificate', event)">Налоговые декларации</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="document-category">
+                        <div class="document-category-header">
+                            <i class="fas fa-gavel document-category-icon"></i>
+                            <h3 class="document-category-title">Локальные акты</h3>
+                        </div>
+                        <ul class="document-list">
+                            <li class="document-item">
+                                <i class="fas fa-file-word document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('rules', event)">Правила внутреннего распорядка</a>
+                                <span class="document-download"><i class="fas fa-download"></i> DOCX</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-word document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('safety', event)">Инструкции по безопасности</a>
+                                <span class="document-download"><i class="fas fa-download"></i> DOCX</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-excel document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('schedule', event)">Графики движения</a>
+                                <span class="document-download"><i class="fas fa-download"></i> XLSX</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="document-category">
+                        <div class="document-category-header">
+                            <i class="fas fa-users document-category-icon"></i>
+                            <h3 class="document-category-title">Документы для клиентов</h3>
+                        </div>
+                        <ul class="document-list">
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('tariffs', event)">Тарифы на перевозки</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-word document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('contract-sample', event)">Образец договора перевозки</a>
+                                <span class="document-download"><i class="fas fa-download"></i> DOCX</span>
+                            </li>
+                            <li class="document-item">
+                                <i class="fas fa-file-pdf document-icon"></i>
+                                <a href="#" class="document-link" onclick="openDocument('refund', event)">Правила возврата билетов</a>
+                                <span class="document-download"><i class="fas fa-download"></i> PDF</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты - переработанный дизайн -->
+        <section class="page contacts-section" id="contacts">
+            <div class="container">
+                <h2 class="page-title">Контакты</h2>
+                <p class="section-subtitle">Свяжитесь с нами удобным для вас способом</p>
+                
+                <div class="contacts-container">
+                    <div class="contact-info-card">
+                        <h3 class="contact-info-title"><i class="fas fa-map-marker-alt"></i> Адрес</h3>
+                        <div class="contact-info-item">
+                            <div class="contact-info-label">
+                                <i class="fas fa-building"></i> Основной офис
+                            </div>
+                            <div class="contact-info-value">
+                                422370, Республика Татарстан, г. Тетюши, ул. Ленина, 123
+                            </div>
+                        </div>
+                        
+                        <h3 class="contact-info-title" style="margin-top: 30px;"><i class="fas fa-phone"></i> Телефоны</h3>
+                        <div class="contact-info-item">
+                            <div class="contact-info-label">
+                                <i class="fas fa-phone-alt"></i> Приемная
+                            </div>
+                            <div class="contact-info-value">
+                                +7 (84373) 1-23-45
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <div class="contact-info-label">
+                                <i class="fas fa-phone-alt"></i> Диспетчерская
+                            </div>
+                            <div class="contact-info-value">
+                                +7 (84373) 1-23-46
+                            </div>
+                        </div>
+                        
+                        <h3 class="contact-info-title" style="margin-top: 30px;"><i class="fas fa-envelope"></i> Электронная почта</h3>
+                        <div class="contact-info-item">
+                            <div class="contact-info-label">
+                                <i class="fas fa-at"></i> Общие вопросы
+                            </div>
+                            <div class="contact-info-value">
+                                info@tetushi-atp.ru
+                            </div>
+                        </div>
+                        
+                        <h3 class="contact-info-title" style="margin-top: 30px;"><i class="fas fa-clock"></i> Режим работы</h3>
+                        <div class="contact-info-item">
+                            <div class="contact-info-label">
+                                <i class="fas fa-calendar-alt"></i> Основной офис
+                            </div>
+                            <div class="contact-info-value">
+                                Пн-Пт: 8:00 - 17:00<br>
+                                Сб: 8:00 - 14:00<br>
+                                Вс: выходной
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-card">
+                        <h3 class="contact-info-title"><i class="fas fa-sitemap"></i> Наши отделы</h3>
+                        
+                        <div class="departments-list">
+                            <div class="department-item">
+                                <div class="department-name">
+                                    <i class="fas fa-bus"></i> Отдел перевозок
+                                </div>
+                                <div class="department-contacts">+7 (84373) 1-23-47</div>
+                                <div class="department-contacts">perevozki@tetushi-atp.ru</div>
+                                <div class="department-hours">Пн-Пт: 8:00-17:00</div>
+                            </div>
+                            
+                            <div class="department-item">
+                                <div class="department-name">
+                                    <i class="fas fa-tools"></i> Технический отдел
+                                </div>
+                                <div class="department-contacts">+7 (84373) 1-23-49</div>
+                                <div class="department-contacts">tehnika@tetushi-atp.ru</div>
+                                <div class="department-hours">Пн-Пт: 8:00-17:00</div>
+                            </div>
+                            
+                            <div class="department-item">
+                                <div class="department-name">
+                                    <i class="fas fa-calculator"></i> Бухгалтерия
+                                </div>
+                                <div class="department-contacts">+7 (84373) 1-23-48</div>
+                                <div class="department-contacts">buh@tetushi-atp.ru</div>
+                                <div class="department-hours">Пн-Пт: 8:00-16:00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-form">
+                            <h3 class="contact-info-title"><i class="fas fa-comments"></i> Обратная связь</h3>
+                            <form onsubmit="submitContactForm(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="contact-name">Ваше имя</label>
+                                        <input type="text" id="contact-name" placeholder="Иван Иванов" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact-phone">Телефон</label>
+                                        <input type="tel" id="contact-phone" placeholder="+7 (XXX) XXX-XX-XX" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-email">Email</label>
+                                    <input type="email" id="contact-email" placeholder="example@mail.ru" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-department">Отдел</label>
+                                    <select id="contact-department" required>
+                                        <option value="">Выберите отдел</option>
+                                        <option value="perevozki">Отдел перевозок</option>
+                                        <option value="tehnika">Технический отдел</option>
+                                        <option value="buh">Бухгалтерия</option>
+                                        <option value="general">Общие вопросы</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-message">Сообщение</label>
+                                    <textarea id="contact-message" placeholder="Ваше сообщение" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить сообщение</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=ваш_api_ключ"></script>
+                    <script>
+                        ymaps.ready(init);
+                        
+                        function init() {
+                            var map = new ymaps.Map("map", {
+                                center: [54.947264, 48.825584],
+                                zoom: 17
+                            });
+                            
+                            var placemark = new ymaps.Placemark([54.947264, 48.825584], {
+                                hintContent: 'Тетюшское АТП',
+                                balloonContent: 'Автотранспортное предприятие<br>ул. Ленина, 123'
+                            }, {
+                                iconLayout: 'default#image',
+                                iconImageHref: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+                                iconImageSize: [40, 40],
+                                iconImageOffset: [-20, -40]
+                            });
+                            
+                            map.geoObjects.add(placemark);
+                            map.controls.remove('geolocationControl');
+                            map.controls.remove('searchControl');
+                            map.controls.remove('trafficControl');
+                            map.controls.remove('typeSelector');
+                            map.controls.remove('fullscreenControl');
+                            map.controls.remove('rulerControl');
+                        }
+                    </script>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3 class="footer-title">Тетюшское АТП</h3>
+                <p>ООО "ТЕТЮШСКОЕ АТП" - ведущее автотранспортное предприятие Тетюшского района Республики Татарстан.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Меню</h3>
+                <ul class="footer-menu">
+                    <li><a href="#" onclick="showPage('home')">Главная</a></li>
+                    <li><a href="#" onclick="showPage('news')">Новости</a></li>
+                    <li><a href="#" onclick="showPage('services')">Услуги</a></li>
+                    <li><a href="#" onclick="showPage('gallery')">Галерея</a></li>
+                    <li><a href="#" onclick="showPage('documents')">Документы</a></li>
+                    <li><a href="#" onclick="showPage('contacts')">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Контакты</h3>
+                <ul class="footer-contacts">
+                    <li><i class="fas fa-map-marker-alt"></i> г. Тетюши, ул. Ленина, 123</li>
+                    <li><i class="fas fa-phone"></i> +7 (84373) 1-23-45</li>
+                    <li><i class="fas fa-envelope"></i> info@tetushi-atp.ru</li>
+                    <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-17:00</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Подписка</h3>
+                <p>Подпишитесь на наши новости и акции</p>
+                <form class="subscribe-form">
+                    <input type="email" placeholder="Ваш email" required>
+                    <button type="submit" class="btn btn-primary">Подписаться</button>
+                </form>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <div class="copyright">© 2025 Тетюшское АТП. Все права защищены.</div>
+            <div class="footer-links">
+                <a href="#">Политика конфиденциальности</a>
+                <a href="#">Пользовательское соглашение</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="news-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="news-modal-title"></h2>
+            </div>
+            <div class="modal-body" id="news-modal-content"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="gallery-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="gallery-modal-title"></h2>
+            </div>
+            <div class="modal-body" id="gallery-modal-content"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="document-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="document-modal-title"></h2>
+            </div>
+            <div class="modal-body" id="document-modal-content"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
+                <a href="#" class="btn btn-primary" id="document-download-btn"><i class="fas fa-download"></i> Скачать</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal small success-modal" id="success-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>Спасибо!</h3>
+                <p>Ваше сообщение успешно отправлено.</p>
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Показать/скрыть страницы
+        function showPage(pageId) {
+            // Скрыть все страницы
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Показать выбранную страницу
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            // Обновить активную ссылку в меню
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Прокрутить вверх
+            window.scrollTo(0, 0);
+            
+            // Закрыть мобильное меню, если оно открыто
+            const navMenu = document.getElementById('nav-menu');
+            if (navMenu && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                const burger = document.querySelector('.burger-menu');
+                if (burger) {
+                    burger.classList.remove('active');
+                }
+            }
+
+            // Убедиться, что модальные окна закрыты при переходе между страницами
+            closeModal();
+
+            // Инициализировать карту при открытии страницы контактов
+            if (pageId === 'contacts') {
+                initMap();
+            }
+        }
+
+        // Переключение мобильного меню
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            if (navMenu) {
+                navMenu.classList.toggle('active');
+            }
+            
+            const burger = document.querySelector('.burger-menu');
+            if (burger) {
+                burger.classList.toggle('active');
+            }
+        }
+
+        // Отправка формы обратной связи
+        function submitContactForm(event) {
+            event.preventDefault();
+            
+            // Для демонстрации показываем модальное окно об успехе
+            const successModal = document.getElementById('success-modal');
+            if (successModal) {
+                successModal.style.display = 'block';
+            }
+            
+            // Очистить форму
+            event.target.reset();
+        }
+
+        // Закрытие модального окна
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Открытие детальной страницы новости
+        function openNewsDetail(newsId, event) {
+            event.preventDefault();
+
+            const modalTitle = document.getElementById('news-modal-title');
+            const modalContent = document.getElementById('news-modal-content');
+
+            let title = '';
+            let content = '';
+            
+            switch(newsId) {
+                case 'news1':
+                    title = 'Обновление автопарка';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 15 Июня 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #f0f8ff; color: #4682b4; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-bus-alt" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>Тетюшское АТП продолжает модернизацию автопарка. В рамках плана по улучшению качества перевозок пассажиров, нами были приобретены три новых современных автобуса ПАЗ с улучшенными техническими характеристиками и повышенным уровнем комфорта для пассажиров.</p>
+                        <p>Новые автобусы оснащены системой кондиционирования, Wi-Fi, USB-портами для зарядки гаджетов, а также системами безопасности, включая камеры заднего вида и системы контроля слепых зон.</p>
+                        <p>Все транспортные средства уже прошли предрейсовый осмотр и готовы к эксплуатации на междугородних маршрутах. Мы уверены, что это значительно повысит уровень удовлетворенности наших клиентов и сделает поездки более комфортными и безопасными.</p>
+                        <p>Обновление автопарка - часть нашей долгосрочной стратегии по модернизации транспортной инфраструктуры Тетюшского района. В планах предприятия - дальнейшее обновление подвижного состава и внедрение современных технологий в процесс перевозок.</p>
+                    `;
+                    break;
+                case 'news2':
+                    title = 'Новый маршрут Тетюши-Ульяновск';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 10 Июня 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #fff0f5; color: #db7093; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-route" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>С 1 июля 2025 года запускается новый регулярный маршрут, соединяющий Тетюши с Ульяновском. Отправления будут осуществляться ежедневно в 7:00 и 15:30.</p>
+                        <p>Этот маршрут значительно упростит транспортное сообщение между городами и позволит жителям региона быстрее добираться до пунктов назначения.</p>
+                        <p>Расстояние составляет около 85 км, время в пути — примерно 1 час 45 минут. Стоимость проезда — 280 рублей.</p>
+                        <p>Для обслуживания маршрута будут задействованы новые автобусы ПАЗ-4234, оснащенные кондиционерами и комфортабельными сидениями. Предусмотрены остановки в населенных пунктах по пути следования.</p>
+                    `;
+                    break;
+                case 'news3':
+                    title = 'Награда за безопасность';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 5 Июня 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #f0fff0; color: #2e8b57; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-award" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>Тетюшское АТП получило благодарственное письмо от ГИБДД Республики Татарстан за высокий уровень безопасности дорожного движения и отсутствие ДТП в 2024 году.</p>
+                        <p>Эта награда подтверждает профессионализм наших водителей и механиков, а также высокий стандарт технического обслуживания автобусов.</p>
+                        <p>Мы гордимся этим достижением и будем и дальше стремиться к безупречной репутации в сфере пассажирских перевозок.</p>
+                        <p>В течение года наши водители прошли дополнительные курсы по безопасности дорожного движения, а все автобусы были оснащены системами мониторинга и контроля за стилем вождения.</p>
+                    `;
+                    break;
+                case 'news4':
+                    title = 'Летнее расписание';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 28 Мая 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #fffaf0; color: #daa520; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-calendar-alt" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>С 1 июня 2025 года вступает в силу летнее расписание движения автобусов.</p>
+                        <p>Во время летних месяцев мы увеличиваем частоту рейсов на самых популярных направлениях, таких как Тетюши - Казань и Тетюши - Ульяновск.</p>
+                        <p>Расписание составлено таким образом, чтобы максимально удобно обслуживать пассажиров в сезон отпусков и дачного сезона.</p>
+                        <p>Особое внимание уделено маршрутам, связывающим Тетюши с садоводческими товариществами и зонами отдыха. На этих направлениях количество рейсов увеличено в 1,5 раза.</p>
+                    `;
+                    break;
+                case 'news5':
+                    title = 'Модернизация ремонтной базы';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 20 Мая 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #f5f5f5; color: #696969; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-tools" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>Завершена масштабная модернизация нашей ремонтной базы. На предприятии установлено новое диагностическое оборудование последнего поколения.</p>
+                        <p>Это позволило значительно повысить точность диагностики и сократить время ремонта автобусов.</p>
+                        <p>Наши специалисты регулярно проходят повышение квалификации, чтобы соответствовать требованиям времени.</p>
+                        <p>В рамках модернизации были оборудованы новые посты для технического обслуживания, закуплены современные подъемники и диагностические стенды. Теперь мы можем обслуживать большее количество транспортных средств в сжатые сроки.</p>
+                    `;
+                    break;
+                case 'news6':
+                    title = 'Обучение персонала';
+                    content = `
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 15 Мая 2025</span>
+                            <span class="news-author"><i class="fas fa-user"></i> Администрация АТП</span>
+                        </div>
+                        <div style="height: 300px; background-color: #f0f8ff; color: #4682b4; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-graduation-cap" style="font-size: 5rem;"></i>
+                        </div>
+                        <p>В мае 2025 года были проведены комплексные курсы повышения квалификации для водителей и механиков предприятия.</p>
+                        <p>Специалисты изучили новые требования безопасности, методы технического обслуживания и правила перевозки пассажиров.</p>
+                        <p>Мы считаем, что квалификация персонала — ключевой фактор успешной работы автотранспортного предприятия.</p>
+                        <p>Обучение проводили сертифицированные инструкторы из Казани. Особое внимание было уделено вопросам экстренного реагирования в нештатных ситуациях и оказанию первой помощи пассажирам.</p>
+                    `;
+                    break;
+                default:
+                    title = 'Новость';
+                    content = `<p>Контент для этой новости еще не подготовлен.</p>`;
+            }
+
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            document.getElementById('news-modal').style.display = 'block';
+        }
+
+        // Открытие изображения в галерее
+        function openGalleryModal(imageId, event) {
+            event.preventDefault();
+            
+            const modalTitle = document.getElementById('gallery-modal-title');
+            const modalContent = document.getElementById('gallery-modal-content');
+            
+            let title = '';
+            let content = '';
+            
+            switch(imageId) {
+                case 'bus1':
+                    title = 'Наш автопарк';
+                    content = `
+                        <div style="height: 400px; background-color: #f0f8ff; color: #4682b4; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-bus-alt" style="font-size: 8rem;"></i>
+                        </div>
+                        <p>Наш современный автопарк включает в себя различные модели автобусов для разных типов перевозок.</p>
+                        <p><strong>Основные модели:</strong></p>
+                        <ul>
+                            <li>ПАЗ-4234 - для междугородних перевозок</li>
+                            <li>ПАЗ-3205 - для внутрирайонных маршрутов</li>
+                            <li>КАВЗ-4238 - для пригородных направлений</li>
+                        </ul>
+                        <p>Все автобусы проходят регулярное техническое обслуживание и соответствуют требованиям безопасности.</p>
+                    `;
+                    break;
+                case 'office':
+                    title = 'Офис компании';
+                    content = `
+                        <div style="height: 400px; background-color: #fff0f5; color: #db7093; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-building" style="font-size: 8rem;"></i>
+                        </div>
+                        <p>Наш центральный офис расположен по адресу: г. Тетюши, ул. Ленина, 123.</p>
+                        <p><strong>Отделы:</strong></p>
+                        <ul>
+                            <li>Диспетчерская служба</li>
+                            <li>Отдел перевозок</li>
+                            <li>Технический отдел</li>
+                            <li>Бухгалтерия</li>
+                            <li>Отдел кадров</li>
+                        </ul>
+                        <p>Мы всегда рады видеть наших клиентов и партнеров в рабочее время.</p>
+                    `;
+                    break;
+                case 'team':
+                    title = 'Наша команда';
+                    content = `
+                        <div style="height: 400px; background-color: #f0fff0; color: #2e8b57; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-users" style="font-size: 8rem;"></i>
+                        </div>
+                        <p>Наша команда - это профессиональные водители, механики и административный персонал, которые обеспечивают бесперебойную работу предприятия.</p>
+                        <p><strong>Статистика:</strong></p>
+                        <ul>
+                            <li>35 водителей с большим стажем работы</li>
+                            <li>10 механиков и техников</li>
+                            <li>15 сотрудников административного персонала</li>
+                            <li>Средний стаж работы на предприятии - 12 лет</li>
+                        </ul>
+                        <p>Мы гордимся нашими сотрудниками и постоянно инвестируем в их профессиональное развитие.</p>
+                    `;
+                    break;
+                case 'maintenance':
+                    title = 'Ремонтная зона';
+                    content = `
+                        <div style="height: 400px; background-color: #fffaf0; color: #daa520; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <i class="fas fa-tools" style="font-size: 8rem;"></i>
+                        </div>
+                        <p>Наша ремонтная база оснащена современным оборудованием для диагностики и ремонта автобусов.</p>
+                        <p><strong>Возможности:</strong></p>
+                        <ul>
+                            <li>Компьютерная диагностика двигателей</li>
+                            <li>Кузовной ремонт</li>
+                            <li>Техническое обслуживание</li>
+                            <li>Шиномонтаж</li>
+                            <li>Электроремонтные работы</li>
+                        </ul>
+                        <p>Регулярное техническое обслуживание позволяет нам поддерживать автобусы в отличном состоянии.</p>
+                    `;
+                    break;
+                default:
+                    title = 'Изображение';
+                    content = `<p>Контент для этого изображения еще не подготовлен.</p>`;
+            }
+
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            document.getElementById('gallery-modal').style.display = 'block';
+        }
+
+        // Открытие документа
+        function openDocument(docId, event) {
+            event.preventDefault();
+            
+            const modalTitle = document.getElementById('document-modal-title');
+            const modalContent = document.getElementById('document-modal-content');
+            const downloadBtn = document.getElementById('document-download-btn');
+            
+            let title = '';
+            let content = '';
+            let downloadLink = '#';
+            
+            switch(docId) {
+                case 'ustav':
+                    title = 'Устав ООО "ТЕТЮШСКОЕ АТП"';
+                    content = `
+                        <p>Документ содержит основные положения об организации и деятельности предприятия.</p>
+                        <p><strong>Дата принятия:</strong> 15 марта 1985 года</p>
+                        <p><strong>Последние изменения:</strong> 10 января 2025 года</p>
+                        <p><strong>Основные разделы:</strong></p>
+                        <ul>
+                            <li>Общие положения</li>
+                            <li>Цели и виды деятельности</li>
+                            <li>Уставный капитал</li>
+                            <li>Органы управления</li>
+                            <li>Порядок реорганизации и ликвидации</li>
+                        </ul>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'reg-certificate':
+                    title = 'Свидетельство о регистрации';
+                    content = `
+                        <p>Официальное свидетельство о государственной регистрации ООО "ТЕТЮШСКОЕ АТП".</p>
+                        <p><strong>Регистрационный номер:</strong> 1234567890123</p>
+                        <p><strong>Дата регистрации:</strong> 15 марта 1985 года</p>
+                        <p><strong>Регистрирующий орган:</strong> Инспекция ФНС России по Тетюшскому району РТ</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'license':
+                    title = 'Лицензия на перевозки';
+                    content = `
+                        <p>Лицензия на осуществление пассажирских перевозок, выданная соответствующими органами.</p>
+                        <p><strong>Номер лицензии:</strong> ТР-12345678</p>
+                        <p><strong>Дата выдачи:</strong> 10 мая 2005 года</p>
+                        <p><strong>Срок действия:</strong> бессрочная</p>
+                        <p><strong>Виды перевозок:</strong></p>
+                        <ul>
+                            <li>Регулярные перевозки в городском сообщении</li>
+                            <li>Регулярные перевозки в пригородном сообщении</li>
+                            <li>Регулярные перевозки в междугородном сообщении</li>
+                            <li>Заказные перевозки</li>
+                        </ul>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'financial-report':
+                    title = 'Финансовый отчет 2024';
+                    content = `
+                        <p>Годовой финансовый отчет предприятия за 2024 год.</p>
+                        <p><strong>Основные показатели:</strong></p>
+                        <ul>
+                            <li>Выручка: 120 млн. руб.</li>
+                            <li>Чистая прибыль: 15 млн. руб.</li>
+                            <li>Количество перевезенных пассажиров: 100 тыс.</li>
+                            <li>Инвестиции в обновление автопарка: 30 млн. руб.</li>
+                        </ul>
+                        <p>Отчет подготовлен в соответствии с требованиями российского законодательства и включает бухгалтерский баланс, отчет о финансовых результатах и приложения.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'tax-certificate':
+                    title = 'Налоговые декларации';
+                    content = `
+                        <p>Документы, подтверждающие налоговую отчетность предприятия.</p>
+                        <p><strong>Включает:</strong></p>
+                        <ul>
+                            <li>Декларацию по налогу на прибыль</li>
+                            <li>Декларацию по НДС</li>
+                            <li>Декларацию по транспортному налогу</li>
+                            <li>Декларацию по налогу на имущество</li>
+                        </ul>
+                        <p>Все декларации поданы в установленные сроки и подтверждены налоговыми органами.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'rules':
+                    title = 'Правила внутреннего распорядка';
+                    content = `
+                        <p>Локальный нормативный акт, регулирующий трудовой распорядок на предприятии.</p>
+                        <p><strong>Основные разделы:</strong></p>
+                        <ul>
+                            <li>Общие положения</li>
+                            <li>Порядок приема и увольнения работников</li>
+                            <li>Основные права и обязанности работников</li>
+                            <li>Режим рабочего времени и времени отдыха</li>
+                            <li>Меры поощрения и взыскания</li>
+                            <li>Охрана труда и техника безопасности</li>
+                        </ul>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'safety':
+                    title = 'Инструкции по безопасности';
+                    content = `
+                        <p>Комплект инструкций по обеспечению безопасности пассажиров и персонала.</p>
+                        <p><strong>Включает:</strong></p>
+                        <ul>
+                            <li>Инструкцию по технике безопасности для водителей</li>
+                            <li>Инструкцию по пожарной безопасности</li>
+                            <li>Инструкцию по действиям в чрезвычайных ситуациях</li>
+                            <li>Инструкцию по перевозке пассажиров</li>
+                            <li>Инструкцию по охране труда для механиков</li>
+                        </ul>
+                        <p>Все инструкции разработаны в соответствии с требованиями законодательства и регулярно обновляются.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'schedule':
+                    title = 'Графики движения';
+                    content = `
+                        <p>Полное расписание автобусных маршрутов предприятия.</p>
+                        <p><strong>Включает:</strong></p>
+                        <ul>
+                            <li>Расписание междугородних маршрутов</li>
+                            <li>Расписание пригородных маршрутов</li>
+                            <li>Расписание внутрирайонных маршрутов</li>
+                            <li>Сезонные изменения расписания</li>
+                        </ul>
+                        <p>Расписание актуально на текущий момент и может изменяться в связи с ремонтом дорог, погодными условиями и другими факторами.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'tariffs':
+                    title = 'Тарифы на перевозки';
+                    content = `
+                        <p>Актуальные тарифы на регулярные и заказные перевозки.</p>
+                        <p><strong>Основные тарифы:</strong></p>
+                        <ul>
+                            <li>Тетюши - Казань: 350 руб.</li>
+                            <li>Тетюши - Ульяновск: 280 руб.</li>
+                            <li>Внутрирайонные маршруты: 35-65 руб.</li>
+                            <li>Пригородные маршруты: 40-80 руб.</li>
+                            <li>Заказные перевозки: от 2000 руб./час</li>
+                        </ul>
+                        <p>Для льготных категорий граждан предусмотрены скидки в соответствии с законодательством.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'contract-sample':
+                    title = 'Образец договора перевозки';
+                    content = `
+                        <p>Типовой договор для заказных перевозок.</p>
+                        <p><strong>Основные разделы:</strong></p>
+                        <ul>
+                            <li>Предмет договора</li>
+                            <li>Обязанности сторон</li>
+                            <li>Порядок расчетов</li>
+                            <li>Ответственность сторон</li>
+                            <li>Форс-мажорные обстоятельства</li>
+                            <li>Срок действия договора</li>
+                            <li>Реквизиты и подписи сторон</li>
+                        </ul>
+                        <p>Договор может быть адаптирован под конкретные условия заказчика.</p>
+                    `;
+                    downloadLink = '#';
+                    break;
+                case 'refund':
+                    title = 'Правила возврата билетов';
+                    content = `
+                        <p>Правила и условия возврата билетов на регулярные рейсы.</p>
+                        <p><strong>Основные положения:</strong></p>
+                        <ul>
+                            <li>Возврат билета возможен не позднее чем за 1 час до отправления</li>
+                            <li>При возврате билета удерживается комиссия 10% от стоимости</li>
+                            <li>Возврат денежных средств осуществляется в течение 3 рабочих дней</li>
+                            <li>В случае отмены рейса деньги возвращаются в полном объеме</li>
+                            <li>Для возврата необходимо предъявить билет и документ, удостоверяющий личность</li>
+                        </ul>
+                    `;
+                    downloadLink = '#';
+                    break;
+                default:
+                    title = 'Документ';
+                    content = `<p>Контент для этого документа еще не подготовлен.</p>`;
+                    downloadLink = '#';
+            }
+
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            downloadBtn.setAttribute('href', downloadLink);
+            document.getElementById('document-modal').style.display = 'block';
+        }
+
+        // Показать расписание
+        function showSchedule(scheduleId, event) {
+            event.preventDefault();
+            
+            document.querySelectorAll('.schedule-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.schedule-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const selectedContent = document.getElementById(`schedule-${scheduleId}`);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            const selectedTab = document.querySelector(`.schedule-tab[onclick*="'${scheduleId}'"]`);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+        }
+
+        // Показать детали услуги
+        function showServiceDetails(serviceId, event) {
+            event.preventDefault();
+            
+            const modalTitle = document.getElementById('document-modal-title');
+            const modalContent = document.getElementById('document-modal-content');
+            const downloadBtn = document.getElementById('document-download-btn');
+            
+            let title = '';
+            let content = '';
+            
+            switch(serviceId) {
+                case 'charter':
+                    title = 'Заказные перевозки';
+                    content = `
+                        <p>Мы предлагаем услуги заказных перевозок для любых мероприятий: экскурсий, корпоративов, свадеб, школьных поездок и других событий.</p>
+                        <p><strong>Преимущества:</strong></p>
+                        <ul>
+                            <li>Комфортабельные автобусы различной вместимости</li>
+                            <li>Опытные водители с большим стажем работы</li>
+                            <li>Гибкая система тарифов</li>
+                            <li>Возможность разработки индивидуального маршрута</li>
+                            <li>Страхование пассажиров</li>
+                        </ul>
+                        <p><strong>Стоимость:</strong> от 2000 руб./час (в зависимости от типа автобуса и расстояния)</p>
+                        <p>Для заказа свяжитесь с нами по телефону +7 (84373) 1-23-47 или по электронной почте perevozki@tetushi-atp.ru.</p>
+                    `;
+                    break;
+                case 'maintenance':
+                    title = 'Техническое обслуживание';
+                    content = `
+                        <p>Наша ремонтная база предоставляет полный спектр услуг по техническому обслуживанию и ремонту автобусов и грузовых автомобилей.</p>
+                        <p><strong>Мы предлагаем:</strong></p>
+                        <ul>
+                            <li>Диагностику двигателей и ходовой части</li>
+                            <li>Плановое техническое обслуживание</li>
+                            <li>Капитальный ремонт агрегатов</li>
+                            <li>Кузовные работы любой сложности</li>
+                            <li>Шиномонтаж и балансировку колес</li>
+                            <li>Электроремонтные работы</li>
+                        </ul>
+                        <p><strong>Преимущества:</strong></p>
+                        <ul>
+                            <li>Современное оборудование</li>
+                            <li>Оригинальные запчасти</li>
+                            <li>Квалифицированные специалисты</li>
+                            <li>Гарантия на выполненные работы</li>
+                        </ul>
+                        <p>Для записи на обслуживание звоните по телефону +7 (84373) 1-23-49 или пишите на tehnika@tetushi-atp.ru.</p>
+                    `;
+                    break;
+                default:
+                    title = 'Услуга';
+                    content = `<p>Информация об этой услуге еще не подготовлена.</p>`;
+            }
+
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            downloadBtn.style.display = 'none';
+            document.getElementById('document-modal').style.display = 'block';
+        }
+
+        // Показать расписание при клике на кнопку
+        function showRouteSchedule(event) {
+            event.preventDefault();
+            showPage('services');
+            document.querySelector('.schedule-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Слайдер
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlides(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            slideIndex = (n + slides.length) % slides.length;
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.add('active');
+        }
+
+        function currentSlide(n) {
+            showSlides(n - 1);
+        }
+
+        function prevSlide() {
+            showSlides(slideIndex - 1);
+        }
+
+        function nextSlide() {
+            showSlides(slideIndex + 1);
+        }
+
+        // Автоматическая смена слайдов
+        setInterval(() => {
+            nextSlide();
+        }, 5000);
+
+        // Анимация счетчиков
+        function animateCounters() {
+            document.querySelectorAll('[data-count]').forEach(el => {
+                let count = parseInt(el.getAttribute('data-count'), 10);
+                let current = 0;
+                let increment = count / 50;
+                let interval = setInterval(() => {
+                    current += increment;
+                    if (current >= count) {
+                        clearInterval(interval);
+                        current = count;
+                    }
+                    el.textContent = Math.floor(current);
+                }, 20);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            const statsSection = document.querySelector('.stats-section');
+            if (!statsSection) return;
+            
+            const rect = statsSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && !statsSection.dataset.animated) {
+                animateCounters();
+                statsSection.dataset.animated = true;
+            }
+        });
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            // Показать главную страницу
+            showPage('home');
+            
+            // Анимация счетчиков, если на главной
+            if (document.getElementById('home').classList.contains('active')) {
+                animateCounters();
+            }
+        });
+    </script>
+</body>
+</html>
